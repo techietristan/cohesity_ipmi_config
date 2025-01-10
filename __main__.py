@@ -5,6 +5,7 @@ from argparse import Namespace
 
 from utils.api_utils import push_config
 from utils.arg_utils import parse_args
+from utils.ip_utils import get_netmask
 from utils.sys_utils import exit_with_code
 
 config: dict = {

@@ -9,7 +9,7 @@ def host_pings(ip_address: str, attempts_remaining: int = 1000) -> bool:
     is_windows: bool = os.sys.platform.lower() ==  'win32' #type: ignore[attr-defined]
     count_param: str = '-n' if is_windows else '-c'
     host_is_pinging: bool = subprocess.run(
-        ['ping', count_param, '1', ip_address],
+        [ 'ping', count_param, '1', ip_address ],
         stdout = subprocess.DEVNULL,
         stderr = subprocess.DEVNULL         
     ).returncode == 0
