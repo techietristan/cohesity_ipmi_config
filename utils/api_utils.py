@@ -142,6 +142,4 @@ def push_config(config: dict, node_hostname: str, node_ip: str, netmask: str, ga
             print(f'{error=}')
             retry_config()
                     
-    return None    
-
-
+    return None
