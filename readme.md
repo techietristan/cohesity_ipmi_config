@@ -1,16 +1,31 @@
 # Cohesity Node IPMI Configuration Script
-### This is an experimental Python script for configuring C5000 series Cohesity nodes.
+### This is an experimental Python script for configuring IPMI network settings for C5000 series Cohesity nodes.
+
+
 
 # Installation
+Ensure you have Git and Python 3 installed. From a terminal, run the following commands:
+```
+git --version
+python3 --version
+```
+## Windows 10, 11
+If the above commands do not return a version number (or return Python 2), install Git and Python 3 using winget:
+```
+winget install -e --id Git.Git
+winget install -e --id Python.Python.3.11
+```
+**Note**: Python 3 may be aliased to `python` or `py` on your system. In that case, replace `python3` in the commands below with the appropriate command for your system.
+
+# Usage
 From a terminal, clone the repository and `cd` into its directory:
 ```
 > git clone https://github.com/techietristan/cohesity_ipmi_config.git
 > cd cohesity_ipmi_config
 ```
-Ensure you have Python 3 installed:
+Install any modules required by the script:
 ```
-> python3 --version
-Python 3.13.3
+pip3 install -r requirements.txt
 ```
 Run the script with the ```--help``` flag to display the required parameters:
 ```
