@@ -2,7 +2,7 @@ import json
 
 from re import search
 from requests import post, Response
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, Timeout
 from time import sleep
 from urllib3 import disable_warnings #type: ignore[import-untyped]
 from urllib3.exceptions import InsecureRequestWarning #type: ignore[import-untyped]
@@ -13,12 +13,13 @@ from utils.ip_utils import get_next_ip
 
 disable_warnings(InsecureRequestWarning)
 
-def make_api_call(config: dict, headers: dict, payload: dict, json: bool = True) -> dict | Response:
+def make_api_call(config: dict, headers: dict, payload: dict, json: bool = True, timeout = 120) -> dict | Response:
     ipmi_api_url: str = config['ipmi_api_url']
     api_response: Response = post(
         ipmi_api_url,
         headers = headers,
         json = payload,
+        timeout = timeout,
         verify = False
     )
 
@@ -34,7 +35,7 @@ def get_token(config: dict) -> dict | None:
         }
     }
     try:
-        auth_response: Response = make_api_call(config, headers, payload, False) #type: ignore[assignment]
+        auth_response: Response = make_api_call(config, headers, payload, json = False, timeout = 5) #type: ignore[assignment]
         response_session_id: str = str(
             search(
                 r'(session_id=[a-z0-9]+)', 
@@ -44,7 +45,7 @@ def get_token(config: dict) -> dict | None:
         response_token = str(auth_response.json()['data'][0]['token'])
         return { 'session_id': response_session_id, 'token': response_token }
     
-    except ConnectionError:
+    except (ConnectionError, Timeout):
         sleep(config['retry_wait_time'])
         get_token(config)
     
@@ -126,12 +127,14 @@ def push_config(config: dict, node_hostname: str, node_ip: str, netmask: str, ga
             if config_successful:
                 next_hostname: str = get_next_hostname(config, node_hostname) #type: ignore[assignment]
                 print(f'{node_hostname} ({node_ip}) successfully configured !\nPlease disconnect {node_hostname} and connect {next_hostname}.')
-                sleep(1)
-                while True:
-                    current_mac = get_mac(config)
-                    if bool(current_mac) and current_mac != config['current_mac']:
-                        break
+                sleep(2)
+                if wait_for_ping(default_node_ip):
                     sleep(1)
+                    while True:
+                        current_mac = get_mac(config)
+                        if bool(current_mac) and current_mac != config['current_mac']:
+                            break
+                        sleep(1)
                 
                 next_ip: str = get_next_ip(config, node_ip)
                 push_config(config, next_hostname, next_ip, netmask, gateway, False)
