@@ -7,9 +7,9 @@ from time import sleep
 from urllib3 import disable_warnings #type: ignore[import-untyped]
 from urllib3.exceptions import InsecureRequestWarning #type: ignore[import-untyped]
 
-from utils.net_utils import wait_for_disconnect, wait_for_ping
-from utils.hostname_utils import get_next_hostname
-from utils.ip_utils import get_next_ip
+from utils.net import wait_for_disconnect, wait_for_ping
+from utils.hostname import get_next_hostname
+from utils.ip import get_next_ip
 
 disable_warnings(InsecureRequestWarning)
 
@@ -31,14 +31,14 @@ def get_token(config: dict) -> dict | None:
         'cmd': 'WEB_LOGIN',
         'data': { 
             'user': config['default_username'], 
-            'pass': config['default_password'] 
+            'pass': config['default_password']
         }
     }
     try:
         auth_response: Response = make_api_call(config, headers, payload, json = False, timeout = 5) #type: ignore[assignment]
         response_session_id: str = str(
             search(
-                r'(session_id=[a-z0-9]+)', 
+                r'(session_id=[a-z0-9]+)',
                 str(auth_response.headers['Set-Cookie'])
             ).group(1) #type: ignore[union-attr]
         )

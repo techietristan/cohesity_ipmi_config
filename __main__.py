@@ -2,15 +2,15 @@ import sys #type: ignore['import-untyped']
 
 from time import sleep
 
-from core.config import settings
-from utils.api_utils import push_config
-from utils.ip_utils import get_netmask
-from utils.net_utils import ping_scan
-from utils.sys_utils import exit_with_code
+from core.config import config
+from utils.api import push_config
+from utils.ip import get_netmask
+from utils.net import ping_scan
+from utils.sys import exit_with_code
 
 def main() -> int:
     try:
-        print(settings)
+        print(config)
         # config['ipmi_api_url'] = f'{config['http_version']}://{config['default_node_ip']}/unix_proxy.fcgi'
         # args: Namespace = parse_args(sys.argv)
         # node_hostname, node_ip, gateway, netmask, verify = args.node_hostname, args.node_ip, args.gateway, get_netmask(args.netmask), args.verify

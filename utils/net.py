@@ -1,21 +1,22 @@
 import os, subprocess
 
+from subprocess import DEVNULL as dev_null
 from time import sleep
 
-from utils.hostname_utils import get_next_hostname
-from utils.ip_utils import get_next_ip
+from utils.hostname import get_next_hostname
+from utils.ip import get_next_ip
 
 def host_pings(ip_address: str, attempts_remaining: int = 1000) -> bool:
     if attempts_remaining == 0:
         return False
 
-    is_windows: bool = os.sys.platform.lower() ==  'win32' #type: ignore[attr-defined]
+    is_windows: bool = bool(os.sys.platform.lower() == 'win32')
     count_param: str = '-n' if is_windows else '-c'
-    host_is_pinging: bool = subprocess.run(
+    host_is_pinging: bool = bool(subprocess.run(
         [ 'ping', count_param, '1', ip_address ],
-        stdout = subprocess.DEVNULL,
-        stderr = subprocess.DEVNULL         
-    ).returncode == 0
+        stdout = dev_null,
+        stderr = dev_null         
+    ).returncode == 0)
 
     if host_is_pinging:
         return True
