@@ -1,4 +1,4 @@
-import sys#type: ignore['import-untyped']
+import sys #type: ignore['import-untyped']
 
 from time import sleep
 
