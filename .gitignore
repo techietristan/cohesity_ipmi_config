@@ -162,8 +162,11 @@ cython_debug/
 #.idea/
 
 # Tempory Files
-temp*.py
+temp*
 
 # Coverage Files
 .coverage
 coverage.lcov
+
+# Log Files
+logs/*
