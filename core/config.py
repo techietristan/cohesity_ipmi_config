@@ -1,8 +1,10 @@
-from pydantic import IPvAnyAddress # type: ignore
+from pydantic import AfterValidator, IPvAnyAddress # type: ignore
 from pydantic_settings import BaseSettings, CliImplicitFlag, CliSettingsSource, CliSuppress, PydanticBaseSettingsSource, SettingsConfigDict# type: ignore
 from sys import argv
+from typing import Annotated
 
 from models import *
+from utils.ip import validate_netmask
 
 class InitialSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file = '.env', extra = 'ignore')
@@ -20,7 +22,7 @@ class Config(InitialSettings):
     first_node_ip: IPvAnyAddress = NodeIP
     node_default_gateway: IPvAnyAddress = Gateway
     node_hostname: str = NodeHostname
-    node_subnet_mask: str = NodeSubnetMask
+    node_subnet_mask: Annotated[str, AfterValidator(validate_netmask)] = NodeSubnetMask
     verify: CliImplicitFlag[bool] = Verify
     increment: CliImplicitFlag[bool] = Increment
     node_model: str = NodeModel

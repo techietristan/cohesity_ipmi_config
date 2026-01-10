@@ -42,4 +42,10 @@ def is_netmask(netmask: str) -> bool:
         return bool(subnet_mask)
     except Exception:
         return False
+    
+def validate_netmask(netmask: str) -> None:
+    if not(is_netmask(netmask)):
+        raise ValueError
+    else:
+        return get_netmask(netmask)
 

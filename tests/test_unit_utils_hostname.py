@@ -3,10 +3,10 @@ import pytest
 from pydantic_settings import BaseSettings
 from utils.hostname import get_next_hostname
 
-class TestConfig(BaseSettings):
+class Config(BaseSettings):
     node_letters: list[str] | None = ['a', 'b', 'c', 'd']
     
-test_config = TestConfig()
+test_config = Config()
 def test_get_next_hostname_returns_string():
     assert isinstance(get_next_hostname(test_config, 'hostname123'), str)
     assert isinstance(get_next_hostname(test_config, 'hostname123a'), str)
