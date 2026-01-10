@@ -41,7 +41,7 @@ def ping_scan(config: dict, hostname: str | None, ip_address: str, first_host: b
         print(f'Please connect to {hostname}.')
     if host_pings(ip_address):
         next_hostname: str | None = get_next_hostname(config, hostname)
-        next_ip: str = get_next_ip(config, ip_address)
+        next_ip: str = get_next_ip(ip_address)
         print(f'{hostname} is reachable at {ip_address}! Please disconnect {hostname} and connect {next_hostname}.')
         ping_scan(config, next_hostname, next_ip)
     else:

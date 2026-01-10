@@ -136,7 +136,7 @@ def push_config(config: dict, node_hostname: str, node_ip: str, netmask: str, ga
                             break
                         sleep(1)
                 
-                next_ip: str = get_next_ip(config, node_ip)
+                next_ip: str = get_next_ip(node_ip)
                 push_config(config, next_hostname, next_ip, netmask, gateway, False)
             else:
                 retry_config()
